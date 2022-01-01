@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>音视频通话</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>音视频通话</h1>
+        <hr>
+        <div class="video_container" align="center">
+            <!-- 本地视频流 -->
+            <video id="local_video" controls autoplay muted webkit-playsinline></video>
+            <!-- 远端视频流 -->
+            <video id="remote_video" controls autoplay muted webkit-playsinline></video>
+        </div>
+        <hr>
+        <button id="startButton">加入房间</button>
+        <button id="hangupButton">挂断</button>
+        <script src="/js/socket.io.min.js"></script>
+        <script src="/js/adapter-latest.js"></script>
+        <script src="main.js"></script>
+    </div>
+</body>
+
+</html>
