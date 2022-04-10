@@ -1,11 +1,11 @@
-// 多对多视频通话
+// 视频直播
 var express = require("express"); //web框架
 var bodyParser = require("body-parser");
 const fs = require("fs");
 
 var app = express();
 app.use("/js", express.static("example/js"));
-app.use("/", express.static("example/many"));
+app.use("/", express.static("example/broadcast"));
 
 let options = {
   key: fs.readFileSync("./ssl/privatekey.pem"), // 证书文件的存放目录
@@ -30,17 +30,18 @@ wss.on("connection", (ws) => {
         ws.userName = json.userName;
         ws.send(JSON.stringify(json));
         break;
-      case "room":
+      case "createRoom":
         ws.roomName = json.roomName;
-        ws.streamId = json.streamId;
-        const roomUserList = getRoomUser(ws);
-        if (roomUserList.length) {
-          const jsonStr = {
-            type: "room",
-            roomUserList,
-          };
-          ws.send(JSON.stringify(jsonStr));
-        }
+        ws.anchor = true;
+        sendAnchors(ws, "addUserList");
+        break;
+      case "joinRoom":
+        ws.roomName = json.roomName;
+        sendAnchor(ws, "addUser");
+        break;
+      case "leaveRoom":
+        sendMessage(ws, str);
+        ws.roomName = null;
         break;
       default:
         sendUser(ws, json);
@@ -49,15 +50,19 @@ wss.on("connection", (ws) => {
   });
 
   ws.on("close", () => {
-    const str = JSON.stringify({
-      type: "close",
-      sourceName: ws.userName,
-      streamId: ws.streamId,
-    });
-    sendMessage(ws, str);
+    if (ws.anchor) {
+      const str = JSON.stringify({
+        type: "close",
+        userName: ws.userName,
+      });
+      sendMessage(ws, str);
+    } else {
+      sendAnchor(ws, "close");
+    }
   });
 });
 
+// 给所有用户发送数据
 function sendMessage(ws, str) {
   wss.clients.forEach((item) => {
     if (
@@ -70,6 +75,7 @@ function sendMessage(ws, str) {
   });
 }
 
+// 给指定用户发送数据
 function sendUser(ws, json) {
   if (ws.userName !== json.userName) {
     wss.clients.forEach((item) => {
@@ -81,25 +87,48 @@ function sendUser(ws, json) {
         const temp = { ...json };
         delete temp.userName;
         temp.sourceName = ws.userName;
-        temp.streamId = ws.streamId;
         item.send(JSON.stringify(temp));
       }
     });
   }
 }
 
-function getRoomUser(ws) {
-  const roomUserList = [];
+// 给指定主播发送数据
+function sendAnchor(ws, type) {
   wss.clients.forEach((item) => {
-    if (item.userName != ws.userName && item.roomName === ws.roomName) {
-      roomUserList.push(item.userName);
+    if (
+      item.userName != ws.userName &&
+      item.roomName === ws.roomName &&
+      item.anchor
+    ) {
+      const str = JSON.stringify({
+        type,
+        userName: ws.userName,
+      });
+      item.send(str);
     }
   });
-  return roomUserList;
+}
+
+// 给指定主播发送房间用户列表数据
+function sendAnchors(ws, type) {
+  const userList = [];
+  wss.clients.forEach((item) => {
+    if (item.roomName === ws.roomName && !item.anchor) {
+      userList.push(item.userName);
+    }
+  });
+  if (userList.length) {
+    const str = JSON.stringify({
+      type,
+      userList,
+    });
+    ws.send(str);
+  }
 }
 
 const config = {
-  port: 8103,
+  port: 8104,
 };
 server.listen(config.port);
 console.log(agreement + " listening on " + config.port);

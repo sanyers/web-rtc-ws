@@ -1,15 +1,13 @@
-.video-container{
+.video-container {
     display: flex;
     justify-content: center;
 }
-.video-item{
+.video-item {
     width: 400px;
     margin-right: 10px
 }
 
-.video-title{}
-
-.video-play{
+.video-play {
     width: 100%;
     height: 300px;
 }

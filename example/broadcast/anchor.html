@@ -3,28 +3,31 @@
 
 <head>
     <meta charset="utf-8">
-    <title>多人频通话</title>
+    <title>屏幕共享与视频直播</title>
     <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
     <div class="container">
+        <a href="audience.html">跳转</a>
         <select id="anchorType">
-            <option value="摄像头">摄像头</option>
+            <option value="视频直播">视频直播</option>
             <option value="屏幕共享">屏幕共享</option>
         </select>
-        <h1>多人频通话</h1>
+        <h1><span id="titleType">视频直播</span>-主播</h1>
         <input type="text" id="userName" placeholder="请输入用户名" />
         <button id="startConn">连接</button>
         <input type="text" id="roomName" placeholder="请输入房间号" />
-        <button id="joinRoom">加入房间</button>
-        <button id="hangUp">挂断</button>
+        <button id="createRoom">创建房间</button>
+        <button id="hangUp">离开</button>
         <hr>
-        <div id="videoContainer" class="video-container" align="center"></div>
+        <div class="video-container" align="center">
+            <video id="streamVideo" controls autoplay muted webkit-playsinline></video>
+        </div>
         <hr>
         <!-- WebRTC兼容文件 -->
         <script src="/js/adapter-latest.js"></script>
-        <script src="main.js"></script>
+        <script src="anchor.js"></script>
     </div>
 </body>
 

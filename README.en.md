@@ -25,3 +25,7 @@ node ./server/one.js
 node ./server/many.js
 
 ![design](example/many/1.png "design")
+
+（4）example broadcast is video live broadcast
+
+node ./server/broadcast.js
