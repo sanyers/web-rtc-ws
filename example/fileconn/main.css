@@ -1,0 +1,13 @@
+.video-container {
+    display: flex;
+    justify-content: center;
+}
+.video-item {
+    width: 400px;
+    margin-right: 10px
+}
+
+.video-play {
+    width: 100%;
+    height: 300px;
+}

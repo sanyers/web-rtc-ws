@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>屏幕共享与视频直播</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div class="container">
+        <a href="audience.html">跳转</a>
+        <select id="anchorType">
+            <option value="视频直播">视频直播</option>
+            <option value="屏幕共享">屏幕共享</option>
+        </select>
+        <h1><span id="titleType">视频直播</span>-主播</h1>
+        <input type="text" id="userName" placeholder="请输入用户名" />
+        <button id="startConn">连接</button>
+        <input type="text" id="roomName" placeholder="请输入房间号" />
+        <button id="createRoom">创建房间</button>
+        <button id="hangUp">离开</button>
+        <hr>
+        <input id="textPage" type="text"/>
+        <button id="sendText">发送</button>
+        <div class="video-container" align="center">
+            <video id="streamVideo" controls autoplay muted webkit-playsinline></video>
+        </div>
+        <div id="msg"></div>
+        <hr>
+        <!-- WebRTC兼容文件 -->
+        <script src="/js/adapter-latest.js"></script>
+        <script src="anchor.js"></script>
+    </div>
+</body>
+
+</html>
