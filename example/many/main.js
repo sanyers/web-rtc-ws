@@ -29,6 +29,7 @@ var config = {
   iceServers: [
     {
       urls: [
+        "stun:stun.voipbuster.com",
         "stun:stun.l.google.com:19302",
         "stun:stun1.l.google.com:19302",
         "stun:stun2.l.google.com:19302",
@@ -132,6 +133,7 @@ joinRoom.onclick = function () {
       joinRoom.disabled = true;
     })
     .catch(function (e) {
+      console.log(e);
       console.log(JSON.stringify(e));
     });
 };
